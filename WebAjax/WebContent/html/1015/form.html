@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../../js/jquery-3.5.1.js"></script>
+<script src="../../js/myutil.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+});
+function myFunction(type){
+	var fm = document.getElementById("myForm");
+	fm.method = type;
+	fm.action = "intro.html"
+ 	fm.submit();
+}
+</script>
+</head>
+<body>
+	<form id="myForm" action="intro.html" method="get">
+		이름 : 
+		<input type="text" name="name"><br>
+		나이 : 
+		<input type="text" name="age"><br>
+		성별 : 
+		<input type="radio" name="gender" value="남자">남자 
+		<input type="radio" name="gender" value="여자">여자<br> 
+		취미 : 
+		<input type="checkbox" name="hobby" value="수영🏊‍♂️">수영
+		<input type="checkbox" name="hobby" value="쇼핑🏩">쇼핑
+		<input type="checkbox" name="hobby" value="악기🎸">악기<br>
+		직업:
+		<input type="checkbox" name="job" value="프로그래머">프로그래머
+		<input type="checkbox" name="job" value="교수">교수
+		<input type="checkbox" name="job" value="사업">사업<br>
+		<br>
+		<input type="button" value="post버튼" onclick="myFunction('post')">
+		<input type="button" value="get버튼" onclick="myFunction('get')"><br>
+		<hr>
+		<button id="btnAjax">Ajax전송</button>
+	
+	</form>
+</body>
+</html>

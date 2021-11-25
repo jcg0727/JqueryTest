@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../../js/jquery-3.5.1.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#btnJson1").click(function(){
+		$.ajax({
+			url : "json_empty.jsp"
+			, dataType : "json" 
+			, success : function(data){
+				var table = makeTable(data);
+				$("#tbList").append(table);
+			}
+		});
+	});
+	$("#btnJson2").click(function(){
+		$.ajax({
+			url : "json_list_data.jsp"
+			, dataType : "json"   
+			, success : function(data){
+				var table = makeTable(data);
+				$("#tbList").append(table);
+			}
+		});
+	});
+});
+function makeTable(data){
+	var str="";
+	$("#tbList tr").not("#tbList tr:nth-child(1)").remove();   //초기화일때  첫번째 tr지움..?
+// 	if($("#tbList tr:first-child").siblings() != undefined){   //테이블에 내용 있으면 일단 지우기
+// 		$("#tbList tr:first-child").siblings().remove();
+// 	} 
+	if(data == null||data.length==0){
+		str= "<tr><td colspan='3'>검색결과가 존재하지 않습니다.</td></tr>";
+		return str;
+	}else{
+		for(var i=0;i<data.length;i++){
+			var name="<td>"+data[i].name+"</td>";
+			var age="<td>"+data[i].age+"</td>";
+			var tel="<td>"+data[i].tel+"</td>";
+			str+="<tr>"+name+age+tel+"</tr>";
+		}
+// 		str+="</table>";
+		return str;
+	}
+}
+</script>
+<style type="text/css">
+table{border-collapse: collapse;}
+table, th, td{
+	border: 1px solid; 
+	text-align: center;
+}
+th{background-color: pink;}
+</style>
+</head>
+<body>
+	<h1>AJAX로 데이터 가져오기 - 로컬파일</h1>
+	<button id="btnJson1">빈파일검색</button>
+	<button id="btnJson2">검색</button>
+	<button id="btnJson3">초기화</button><br>
+	<hr>
+	<div id="divResult"></div>
+	<table id="tbList">
+		<tr>
+			<th style="width: 30%">이름</th>
+			<th style="width: 25%">나이</th>
+			<th style="width: 35%">전화번호</th>
+		</tr>
+	</table>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="../../css/memberview.css">
+<script src="../../js/jquery-3.5.1.js"></script>
+<script type="text/javascript">
+// function memSearch(){
+// 	$.ajax({
+// 		url : "/MemberServlet"
+// 		,type : "post"
+// 		,dataType : "json"
+// 		,data : $("#sId").serialize()
+// 		,success : function(data){
+// 			console.log(data);
+// 			alert('성공');
+// 			makeView(data);
+// 		}	
+// 		,error : function(xhr){
+// 			console.log(xhr);
+// 			alert('실패');
+// 		}
+// 	});
+// }
+// function makeView(data){
+// 	$("#memId").html(data.id);
+// 	$("#memName").html(data.name);
+// 	$("#memBirth").html(data.birth.substr(0,10));
+// 	$("#memAddr").html(data.addr);
+// 	$("#memTel").html(data.tel);
+// }
+function updateMem(){
+	$.ajax({
+		url : "/MemberServlet"
+		,type : "post"
+		,dataType : "json"
+		,data : $("#mf").serialize()
+		,success : function(data){
+			console.log(data);
+			alert(data.resultMsg);
+		}	
+		,error : function(xhr){
+			console.log(xhr);
+			alert('실패');
+		}
+	});
+}
+</script>
+</head>
+<body>
+	<h1>회원정보</h1>
+	<form id="mf">
+	<input type="hidden" name="action" value="U">
+		<table>
+			<colgroup>
+				<col style="width:15%">
+	               <col style="width:35%">
+	               <col style="width:15%">
+	               <col style="width:35%">
+			</colgroup>
+			<tr>
+				<td>회원ID</td>
+				<td><input type="text" name="id"></td>
+				<td>회원이름</td>
+				<td><input type="text" name="name"></td>
+			</tr>
+			<tr>
+				<td>패스워드</td>
+				<td><input type="text" name="password"></td>
+				<td>전화번호</td>
+				<td><input type="text" name="hp"></td>
+			</tr>
+			<tr>
+				<td>주민번호</td>
+				<td><input type="text" name="regno1"></td>
+				<td>생년월일</td>
+				<td><input type="text" name="birth"></td>
+			</tr>
+			<tr>
+				<td>주소</td>
+				<td><input type="text" name="addr2"></td>
+			</tr>
+		</table>
+		<button style="background-color:gray;margin-left:200px;">취소</button>
+		<input type="button" style="background-color: blue; width:200px; color:white" value="저장" onclick="updateMem()">
+	</form>
+</body>
+</html>

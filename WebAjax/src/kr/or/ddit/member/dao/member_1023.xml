@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- namespace속성 : 아래에서 작성한 SQL을 호출할 때 같이 사용된다. -->			
+<sqlMap namespace="member">
+	
+	 <resultMap class="memVO" id="memberMap">   <!-- 멤버들이 컬럼명이랑 다를 때 컬럼명이랑 매핑시켜주는 것. -->
+	 	<result property="memId" column="mem_id"/>
+	 	<result property="memName" column="mem_name"/>
+	 	<result property="memTel" column="mem_tel"/>
+	 	<result property="memAddr" column="mem_addr"/>
+	 </resultMap>
+	 
+	<insert id="insertMember" parameterClass="kr.or.ddit.member.vo.MemberVO">
+		insert into mymember(mem_id, mem_name, mem_tel, mem_addr) 
+		values(#memId#, #memName#, #memTel#, #memAddr#)	<!--##은 getmemId()로 보고 가져옴-->
+	</insert>	
+	
+	<update id="updateMember">
+		update mymember 
+		set mem_name = #memName#, mem_tel = #memTel#, mem_addr = #memAddr# 
+		where mem_id = #memId# 
+	</update>
+	<delete id="deleteMember" parameterClass="String">
+		delete from mymember where mem_id=#memId#
+	</delete>
+	<select id="getMemberAll" resultMap="memberMap">
+		select * from mymember
+	</select>
+	<select id="getMember" resultMap="memberMap">
+		select * from mymember where mem_id = #memId#
+	</select>
+	<select id="getSearchMember" resultMap="memberMap"> 
+		select * from mymember where 1=1
+			<isNotEmpty property="memId">
+				and mem_id = #memId#
+			</isNotEmpty>
+			<isNotEmpty property="memName">
+				and mem_name = #memName#
+			</isNotEmpty>
+			<isNotEmpty property="memTel">
+				and mem_tel = #memTel#
+			</isNotEmpty>
+			<isNotEmpty property="memAddr">
+				and mem_addr like '%' || #memAddr# || '%'    
+			</isNotEmpty>
+	</select>
+</sqlMap>			
+
+
+
+
+

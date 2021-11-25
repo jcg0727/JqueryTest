@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../../js/jquery-3.5.1.js"></script>
+<script src="../../js/myutil.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#name").html(getParamByLocation("name"));
+	$("#age").append(getParamByLocation("age"));
+	var hobby = getParamByLocation("hobby")+"열심히 하세요~^^";
+	$("#hobby").append(hobby);
+	$("#job").append(getParamByLocation("job"));
+});
+</script>
+</head>
+<body>
+	하이~ <span id="name"></span><br>
+	올해로<span id="age">살 이시네요</span><br>
+	<span id="hobby"></span><br>
+	<span id="job"></span>
+</body>
+</html>

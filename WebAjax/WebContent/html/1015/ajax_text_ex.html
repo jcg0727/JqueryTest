@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../../js/jquery-3.5.1.js"></script>
+<script type="text/javascript">
+function changeDiv1(){
+	//div1변경하기 
+	$.ajax({  //세팅해줘야되는 속성이 여러개라 {}로
+		url : "intro.html"
+		, dataType : ""
+		, success : function(data){
+			$("#div1").html(data);
+			makeTable();
+		}
+		, error : function(){}
+	});
+}
+
+function makeTable(){
+	var table = ""
+	+ '<table border="1">'
+	+ '	<tr>             '
+	+ '		<th>제목</th> '
+	+ '		<th>가수</th> '
+	+ '	</tr>            '
+	+ '	<tr>             '
+	+ '		<th>'+name+'</th>'
+	+ '		<th>'+title'</th>'   //xml로 가져온 거
+	+ '	</tr>            '
+	+ '</table>          ';
+	
+	$("#div1").html();
+	
+}
+</script>
+</head>
+<body>
+	<button type="button" onclick="changeDiv1()">바꿔</button>
+	<div id="div1" style="border: 1px solid red;">
+		<h1>AJAX 테스트</h1>
+		<p>오늘도 화이팅..♥</p>
+	</div>
+	
+</body>
+</html>

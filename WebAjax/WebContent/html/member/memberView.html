@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="../../css/memberview.css">
+<script src="../../js/jquery-3.5.1.js"></script>
+<script src="../../js/myutil.js"></script>
+<script type="text/javascript">
+function memSearch(){
+	$.ajax({
+		url : "/MemberServlet"
+		,type : "post"
+		,dataType : "json"
+		,data : $("#sId").serialize()
+		,success : function(data){
+			console.log(data);
+			alert('성공');
+			makeView(data);
+		}	
+		,error : function(xhr){
+			console.log(xhr);
+			alert('실패');
+		}
+	});
+}
+
+
+function makeView(data){
+	$("#memId").html(data.id);
+	$("#memPass").html(data.password);
+	$("#memName").html(data.name);
+	$("#memBirth").html(data.birth.substr(0,10));
+	$("#memAddr").html(data.addr);
+	$("#memTel").html(formatHpno(data.tel));
+	console.log(formatHpno(data.tel));
+}
+
+</script>
+</head>
+<body>
+	<h1>회원정보</h1>
+	<form id="sId">
+		<input type="hidden" name="action" value="R">
+		<input type="text" name="id">
+		<input type="button" value="검색" onclick="memSearch()">  
+		<table>
+			<colgroup>
+				<col style="width:15%">
+	               <col style="width:35%">
+	               <col style="width:15%">
+	               <col style="width:35%">
+			</colgroup>
+			<tr>
+				<td>회원ID</td>
+				<td><span id="memId"></span></td>
+				<td>회원이름</td>
+				<td><span id="memName"></span></td>
+			</tr>
+			<tr>
+				<td>패스워드</td>
+				<td><span id="memPass"></span></td>
+				<td>전화번호</td>
+				<td><span id="memTel"></span></td>
+			</tr>
+			<tr>
+				<td>주민번호</td>
+				<td><span id="regno1"></span></td>
+				<td>생년월일</td>
+				<td><span id="memBirth"></span></td>
+			</tr>
+			<tr>
+				<td>주소</td>
+				<td><span id="memAddr"></span></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

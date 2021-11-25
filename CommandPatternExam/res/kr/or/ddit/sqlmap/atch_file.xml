@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- namespace속성 : 아래에서 작성한 SQL을 호출할 때 같이 사용된다. -->			
+<sqlMap namespace="atchFile">
+
+	 <resultMap class="kr.or.ddit.member.vo.AtchFileVO" id="atchFileMap">  
+	 	<result property="atchFileId" column="atch_file_id"/>
+	 	<result property="fileSn" column="file_sn"/>
+	 	<result property="fileStreCours" column="file_stre_cours"/>
+	 	<result property="streFileNm" column="stre_file_nm"/>
+	 	<result property="orignalFileNm" column="ORIGNL_FILE_NM"/>
+	 	<result property="fileExtsn" column="file_extsn"/>
+	 	<result property="fileCn" column="file_cn"/>
+	 	<result property="fileSize" column="file_size"/>
+	 	<result property="creatDate" column="creat_dt"/>
+	 </resultMap>
+	 
+	<insert id="insertAtchFile" parameterClass="kr.or.ddit.member.vo.AtchFileVO">
+	
+		<selectKey keyProperty="atchFileId" resultClass="long">
+			select atch_file_seq.nextval from dual
+		</selectKey>
+		
+		insert into atch_file
+		(ATCH_FILE_ID
+		,FILE_SN
+		,FILE_STRE_COURS
+		,STRE_FILE_NM
+		,ORIGNL_FILE_NM
+		,FILE_EXTSN
+		,FILE_CN
+		,FILE_SIZE
+		,CREAT_DT)
+		values
+		(
+		 #atchFileId#
+		,#fileSn#
+		,#fileStreCours#
+		,#streFileNm#
+		,#orignalFileNm#
+		,#fileExtsn#
+		,#fileCn#
+		,#fileSize#
+		,sysdate)
+	</insert>
+	
+	<select id="getAtchFileList" resultMap="atchFileMap">
+		select * from atch_file
+		 where atch_file_id = #atchFileId#
+	</select>
+	
+	<select id="getAtchFile" resultMap="atchFileMap">
+		select * from atch_file
+		 where atch_file_id = #atchFileId# 
+		   and file_sn = #fileSn#
+	</select>
+	
+	
+</sqlMap>			
+
+
+
+
+

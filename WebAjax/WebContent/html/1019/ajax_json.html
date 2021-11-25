@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../../js/jquery-3.5.1.js"></script>
+<script type="text/javascript">
+$(function(){
+	
+	$("#btnJson1").click(function(){
+		$.ajax({
+			url : "jsondata1.txt"
+			, dataType : "json"   //여기에 타입을 json으로 넣어주면 JSON.parse(data)로 안바꿔도 됨.
+			, success : function(data){
+// 				var pObj = JSON.parse(data);
+// 				$("#sName").html(pObj.name);
+// 				$("#sAge").html(pObj.age);
+// 				$("#divResult").html(data);
+				$("#sName").html(data.name);
+				$("#sAge").html(data.age);
+				$("#divResult").html(data);
+			}
+		});
+	});
+	$("#btnJson2").click(function(){
+		$.ajax({
+			url : "json_simple_data.jsp"
+			, dataType : "json"   //여기에 타입을 json으로 넣어주면 JSON.parse(data)로 안바꿔도 됨.
+			, success : function(data){
+				$("#sName").html(data.name);
+				$("#sAge").html(data.age);
+				$("#divResult").html(data);
+			}
+		});
+	});
+	$("#btnJson3").click(function(data){
+		$.ajax({
+			url : "json_arr_data.jsp"
+			, dataType : "json"
+			, success : function(data){
+				
+				$("#sJob").html(data+" ");
+				var strO = "<ol>";     //메서드 안만들고 여기서 바로해도 됨
+				for(var i=0;i<data.length;i++){
+					strO+="<li>"+data[i]+"</li>";
+				}
+				strO+="</ol>";
+				$("#sJob").append(strO);
+				
+				var strS = "<select>";     
+				for(var i=0;i<data.length;i++){
+					strS+="<option>"+data[i]+"</option>";
+				}
+				strS+="</select>";
+				$("#sJob").append(strS);
+			}
+			, error : function(data){
+				
+			}
+		})
+	});
+	$("#btnJson4").click(function(){
+		$.ajax({
+			url : "json_list_data.jsp"
+			, dataType : "json"   //여기에 타입을 json으로 넣어주면 JSON.parse(data)로 안바꿔도 됨.
+			, success : function(data){
+				var table = "<table><tr><th>이름</th><th>나이</th><th>전화번호</th></tr>";
+				var str="";
+				for(var i=0;i<data.length;i++){
+					var name="<td>"+data[i].name+"</td>";
+					var age="<td>"+data[i].age+"</td>";
+					var tel="<td>"+data[i].tel+"</td>";
+					str+="<tr>"+name+age+tel+"</tr>";
+				}
+				table+=str+"</table>";
+				$("#divResult").html(table);
+			}
+		});
+	});
+})
+
+</script>
+<style type="text/css">
+table{border-collapse: collapse;}
+table, th, td{border: 1px solid; text-align: center;}
+th{background-color: lightblue;}
+</style>
+</head>
+<body>
+	<h1>AJAX로 데이터 가져오기 - JSON DATA</h1>
+	<button id="btnJson1">JSONText</button>
+	<button id="btnJson2">JSONJSP</button>
+	<button id="btnJson3">JSONArr</button><br>
+	<button id="btnJson4">JSONList</button><br>
+	<hr>
+	<p>이름 : <span id="sName"></span><br>
+	<p>나이 : <span id="sAge"></span><br>
+	<p>직업 : <span id="sJob"></span><br>
+	<div id="divResult"></div>
+	<div id="divResult2"></div>
+</body>
+</html>

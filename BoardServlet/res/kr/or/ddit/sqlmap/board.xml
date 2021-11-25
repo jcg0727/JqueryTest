@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- namespace속성 : 아래에서 작성한 SQL을 호출할 때 같이 사용된다. -->			
+<sqlMap namespace="board">
+	
+	 <resultMap class="boardVO" id="BoardMap">
+	 	<result property="boardNo" column="board_no"/>
+	 	<result property="boardTitle" column="board_title"/>
+	 	<result property="boardWriter" column="board_writer"/>
+	 	<result property="boardDate" column="board_date"/>
+	 	<result property="boardContent" column="board_content"/>
+	 </resultMap>
+	 
+	<insert id="insertBoard" parameterClass="boardVO">
+		insert into jdbc_board(board_no, board_title, board_writer, board_date, board_content) 
+		values(BOARD_SEQ.NEXTVAL, #boardTitle#, #boardWriter#, sysdate, #boardContent#)
+	</insert>	
+	
+	<update id="updateBoard">
+		update jdbc_board
+		set board_title = #boardTitle#
+		  , board_content = #boardContent#
+		  , board_writer = #boardWriter#
+		  , board_date = sysdate
+		where board_no = #boardNo#
+	</update>
+	
+	<delete id="deleteBoard" parameterClass="Integer">
+		delete jdbc_board where board_no = #boardNo#
+	</delete>
+	
+	<select id="getBoardAll" resultMap="BoardMap"> 
+		select * from jdbc_board
+	</select>
+	
+	<select id="getBoard" resultMap="BoardMap">
+		select * from jdbc_board
+		where board_no = #boardNo#
+	</select>
+	
+	<select id="searchBoard" resultMap="BoardMap">
+		select * from jdbc_board where 1=1 
+<!-- 		<isNotNull property="board_no"> -->
+<!-- 			and board_no = #boardNo#   -->
+<!-- 		</isNotNull> -->
+		<isNotEmpty property="boardTitle">
+			and board_title like '%' || #boardTitle# || '%' 
+		</isNotEmpty>
+		<isNotEmpty property="boardContent">
+			and board_content like '%' || #boardContent# || '%' 
+		</isNotEmpty>
+		<isNotEmpty property="boardWriter">
+			and board_writer = #boardWriter# 
+		</isNotEmpty>
+		<isNotEmpty property="boardDate">
+			and to_char(board_date, 'yyyy-mm-dd') like '%' || #boardDate# || '%'
+		</isNotEmpty>
+	</select>
+</sqlMap>			
+
+
+
+
+

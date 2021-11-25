@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../../js/jquery-3.5.1.js"></script>
+<script type="text/javascript">
+$(function(){   //(document).ready 생략
+	$("#btnText").click(function(){
+		$.ajax({
+			url : "socket.txt"   // 파일명은 영어 소문자로 쓰기
+			, success : function(data){     //data는 url로부터 리턴받는 값
+				$("#divResult").html(data);
+			} 
+			, error: function(){
+				alert('텍스트 파일 불러오기 실패');
+			}
+		});	
+	});
+	$("#btnHTML1").click(function(){
+		$.ajax({
+			url : "htmldata.html"   // 파일명은 영어 소문자로 쓰기
+			, success : function(data){     //data는 url로부터 리턴받는 값
+				$("#divResult").html(data);
+			} 
+			, error: function(xhr){
+				alert('html 파일 불러오기 실패\n'+xhr.status);
+			}
+		});	
+	});
+	$("#btnHTML2").click(function(){
+		$.ajax({
+			url : "socket.html"   // 파일명은 영어 소문자로 쓰기
+			, success : function(data){     //data는 url로부터 리턴받는 값
+				$("#divResult").html(data);
+			} 
+			, error: function(xhr){
+				alert('html 파일 불러오기 실패\n'+xhr.status);
+			}
+		});	
+	});
+	$("#btnXML").click(function(){
+		$.ajax({
+			url : "xmldata.xml"   // 파일명은 영어 소문자로 쓰기
+			, success : function(data){     //data는 url로부터 리턴받는 값
+				makeTable(data);
+			} 
+			, error: function(xhr){
+				alert('xml 파일 불러오기 실패\n'+xhr.status);
+			}
+		});	
+	});
+	$("#btnXMLC").click(function(){
+		$.ajax({
+			url : "cd_catalog.xml"   // 파일명은 영어 소문자로 쓰기
+			, success : function(data){     //data는 url로부터 리턴받는 값
+				makeCatalog(data);
+			} 
+			, error: function(xhr){
+				alert('xml 파일 불러오기 실패\n'+xhr.status);
+			}
+		});	
+	});
+	$("#btnXMLC2").click(function(){
+		$.ajax({
+			url : "cd_catalog_1.xml"   // 파일명은 영어 소문자로 쓰기
+			, success : function(data){     //data는 url로부터 리턴받는 값
+				makeCatalog2(data);
+			} 
+			, error: function(xhr){
+				alert('xml 파일 불러오기 실패\n'+xhr.status);
+			}
+		});	
+	});
+	
+
+});
+
+//경륜언니 방법으로 다시해보기. 내가 짠거 다음에 보면 이해못할것같음,,
+function makeCatalog2(xmlData){	
+	var cd = xmlData.getElementsByTagName("CD");
+	var table="<table ><tr><th>Title</th>" 
+	                    +"<th>Artist</th>"
+	                    +"<th>COUNTRY</th>"
+	                    +"<th>COMPANY</th>"
+	                    +"<th>PRICE</th>"
+	                    +"<th>YEAR</th></tr>";
+	var tagArr = new Array();
+	tagArr[0] = cd[0].childNodes[1].nodeName;   //TITLE
+	tagArr[1] = cd[0].childNodes[3].nodeName;   //ARTIST
+	tagArr[2] = cd[0].childNodes[5].nodeName;   //COUNTRY
+	tagArr[3] = cd[0].childNodes[7].nodeName;   //COMPANY
+	tagArr[4] = cd[0].childNodes[9].nodeName;   //PRICE
+	tagArr[5] = cd[0].childNodes[11].nodeName;  //YEAR
+	console.dir(cd);
+	console.log(cd);
+	var strT="";
+	for(var i=0;i<cd.length;i++){  //cd.length
+		strT+="<tr>";
+		var k = 0;
+		for(var j=0;j<cd[i].childNodes.length/2-1;j++){
+			var text = cd[i].childNodes[j*2+1];
+			if(text.childNodes[0].nodeValue !=undefined && text.nodeName==tagArr[k]){
+				strT = strT+"<td>"+text.childNodes[0].nodeValue+"</td>"
+				k++;
+			}else if(text.childNodes[0].nodeValue !=undefined){
+				strT = strT+"<td>"+" "+"</td>";
+				k++;
+				j--;   //만약에 태그가 빠져있으면 j는 그대로 있어야 되니까 다시 --해줘야됨.
+			}
+		}
+		strT+="</tr>";
+	}
+	tableE="</table>";
+	var str=table+strT+tableE;
+	$("#divResult").html(str);
+}
+
+//nodeName 
+//엘리먼트 : 태그 이름, 속성  : 속성 이름, 텍스트 : #text, 문서 : #document
+//nodeValue
+//엘리먼트 : undefined, 텍스트 : 텍스트자체, 속성 : 속성 값 
+function makeCatalog(xmlData){
+	var title = xmlData.getElementsByTagName("TITLE");
+	var artist = xmlData.getElementsByTagName("ARTIST");
+	var table="<table ><tr><th>Title</th>" 
+	                    +"<th>Artist</th></tr>";
+	var strT="";
+	for(var i=0;i<title.length;i++){
+		strT = strT+"<tr> <td>"+title[i].childNodes[0].nodeValue+"</td>"
+		           + "<td>"+artist[i].childNodes[0].nodeValue+"</td></tr>";
+	}
+	tableE="</table>";
+	var str=table+strT+tableE;
+	$("#divResult").html(str);
+}
+
+
+//console찍었을 때 Collenction나오면 배열
+//             element나오면 값
+function makeTable(xmlData){
+// 	console.log(note[0].childNodes[0]);  //alert로 찍으면 text라고 뜨는데 콘솔은 그 문자 나옴. alert에도 문자 나오게 할라면 nodeValue까지 해줘야 됨
+// 	console.log(note[0].childNodes[0].nodeValue);
+// 	alert(note[0].childNodes[0].nodeValue);   //nodeValue안써도 문자 나오는데 써야되나
+	
+	var note = xmlData.getElementsByTagName("from");
+	var str="";
+	for(var i=0;i<note.length;i++){
+// 		str+=note[i].childNodes[0].nodeValue+", ";
+		str = str+"<p>"+ note[i].childNodes[0].nodeValue+"</p>"; //<p>~</p> <p>의 첫번째 자식노드 ~의 값을 붙여라.
+	}
+// 	str=str.substr(0, str.length-2);
+	$("#divResult").html(str);
+}
+
+</script>
+<style type="text/css">
+table{
+	border-collapse: collapse;
+}
+table, th, td{
+	border: 1px solid black;
+	text-align: center;
+}
+th{background-color: lightblue;}
+/* span{color:blue;} */
+</style>
+</head>
+<body>
+	<h1>AJAX로 데이터 가져오기 - 로컬 파일</h1>
+	<button id="btnText">텍스트파일</button>
+	<button id="btnHTML1">HTML파일</button>
+	<button id="btnHTML2">HTML</button><br>
+	<button id="btnXML">XML_D</button>
+	<button id="btnXMLC">XML_C</button>
+	<button id="btnXMLC2">XML_C2</button>
+	<hr>
+	<div id="divResult"></div>
+</body>
+</html>

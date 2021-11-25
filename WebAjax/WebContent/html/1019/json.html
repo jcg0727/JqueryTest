@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../../js/jquery-3.5.1.js"></script>
+<script type="text/javascript">
+$(function(){
+	var obj = {
+		name : "홍길동"
+		, addr : {city : "대전광역시"
+			      , gu : "중구"
+			      , dong : "대흥동"
+			      , zipcode : "12345"}
+		, hobby : ["창고털기", "무술", "검술"]
+		, birth : "1997.04.18"
+	}
+	$("button").click(function(){
+		var str = JSON.stringify(obj);       //객체를 문자열로 변환   
+		$("#ch1").html(str);
+		
+		var pObj = JSON.parse(str);          //문자열을 json객체로 변환
+		$("#ch2").text(pObj);    
+		
+		$("#name").html(pObj.name);     
+		for(var i=0;i<Object.values(pObj.addr).length;i++){
+			var s = Object.values(pObj.addr)[i];
+			$("#addr").append(s+" ");
+		}
+		var hobby = "";
+// 		for(var i=0;i<pObj.hobby.length;i++){
+// 			hobby+=pObj.hobby[i]+", ";
+// 		}
+		//for-each문
+		for(x in pObj.hobby){
+			hobby+=pObj.hobby[x]+", ";
+		}
+		$("#hobby").append(hobby.substr(0,hobby.length-2));
+		$("#birth").html(pObj.birth);
+		console.log(pObj.addr.city);
+	});
+});
+</script>
+<style type="text/css">
+div{
+	border: 1px solid;
+	padding-left: 10px;
+}
+</style>
+</head>
+<body>
+	<div>
+		<button>JSON변환 테스트</button><br><br>
+		1차 변환(obj > str): <span id="ch1"></span><br><br>
+		2차 변환(str > obj): <span id="ch2"></span><br><br>
+		이름: <span id="name"></span><br><br>
+		주소: <span id="addr"></span><br><br>
+		취미: <span id="hobby"></span><br><br>
+		생년월일:<span id="birth"></span>
+	</div>	
+	
+</body>
+</html>

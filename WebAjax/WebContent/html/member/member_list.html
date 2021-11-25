@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../../js/jquery-3.5.1.js"></script>
+<script src="../../js/myutil.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/listcss.css?v=1">
+<script type="text/javascript">
+function selectMem(){
+	$.ajax({
+		url : "/MemberServlet"   // 요청을 보낼 서버의 주소
+		,type : "post"
+		,dataType : "json"
+		,data : $("#fm").serialize()    //요청과 함께 서버로 보낼 데이터
+		,success : function(data){    //요청이 성공일 때
+			console.log(data);
+			var table=makeTable(data);
+			$("#tbResult").append(table);
+		}
+		,error : function(xhr){
+			console.log(xhr);
+			alert("오류발생"+xhr.status);
+		}
+	});
+}
+
+function formatHp(hpNo){
+	var result = "";
+	if(hpNo.length == 11){
+		result = hpNo.substr(0,3) + "-"
+		     + hpNo.substr(3,4) + "-"
+		     + hpNo.substr(7);
+	}else if(hpNo.length == 10){
+		result = hpNo.substr(0,3) + "-"
+	     + hpNo.substr(3,3) + "-"
+	     + hpNo.substr(6);
+	}
+	return result;
+}
+$(document).ready(function(){
+	//on으로 이벤트 바인딩해주면 나중에 생길 a태그들에도 클릭이벤트를 바인딩함
+	//그냥 $('a').click하면 처음 페이지가 로드됬을때 a태그들에만 적용
+	$("#tbResult").on("click", "a", function(){
+		goMemberView($(this).text());
+	});
+})
+
+function goMemberView(memberId){
+	$("#selectedMemId").val(memberId);   //memId의 value를 a001로 해서 서버로 보낼게
+	var fm = document.getElementById("tmpFm");
+	fm.method = "post";
+	fm.action = "/MemberServlet";
+	fm.submit();
+}
+
+function makeTable(data){
+	var str="";
+	$("#tbResult tbody").remove();
+	for(var i=0;i<data.length;i++){
+		var gen = "";
+		if(data[i].regno2.substr(0,1)=="1" || data[i].regno2.substr(0,1)=="3"){
+			gen = "남";
+		}else{
+			gen = "여";
+		}
+		var age = 2020-data[i].birth.substr(0,4)+1;
+		str+="<tr>"
+		   +"<td><"+(i+1)+"></td>"
+		   +"<td><a>"+data[i].id+"</a></td>"
+		   +"<td>"+data[i].password+"</td>"
+		   +"<td>"+data[i].name+"</td>"
+		   +"<td>"+age+"</td>"
+		   +"<td>"+gen+"</td>"
+		   +"<td>"+formatDate(data[i].birth)+"</td>"
+		   +"<td>"+formatHpno(data[i].tel)+"</td>"
+		   +"<td>"+data[i].addr+"</td>"
+		   +"</tr>";
+	}
+	return str;
+}
+</script>
+
+</head>
+<body>
+	<!-- 검색영역 -->
+	<article class="search-wrap">
+		<header>
+			<h4>검색조건</h4>
+		</header>
+		<div class="search-wrap-body">
+			<form id="fm">
+				<input type="hidden"  name = "action">
+				<dl>
+					<dt>ID</dt>
+					<dd>
+						<input type="text" name="id" id="userId">
+					</dd>
+					<dt>이름</dt>
+					<dd>
+						<input type="text" name="name" id="userName">
+					</dd>
+				</dl>
+				<div class="btn-box-center">
+					<button class="btn-search" type="button" id="btnSearch" onclick="selectMem()">검색</button>
+					<button class="btn-reset" type="reset" id="btnReset">초기화</button>
+				</div>
+				<input type="hidden" name="action" value="retrieveList">
+			</form>
+		</div>
+	</article>
+	<!-- 그리드 목록 -->
+	<article class="result-wrap">
+		<header>
+			<h4>회원 목록</h4>
+		</header>
+		<div>
+			<table id="tbResult">
+				<caption>표의 제목</caption>
+				<colgroup>
+					<col style="width:40px">
+	                <col style="width:100px">
+	                <col style="width:100px">
+	                <col style="width:100px">
+	                <col style="width:80px">
+	                <col style="width:60px">
+	                <col style="width:110px">
+	                <col style="width:auto">
+	                <col style="width:25%">
+				</colgroup>
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>ID</th>
+						<th>비밀번호</th>
+						<th>이름</th>
+						<th>나이</th>
+						<th>성별</th>
+						<th>생년월일</th>
+						<th>전화번호</th>
+						<th>주소</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="9">검색 버튼을 클릭하세요.</td>
+					</tr>
+				</tbody>
+			</table>
+	    </div>
+	    <div class="result-wrap-footer">
+			<div class="btn-box-right">
+				<button type="button" class="btn-new"><a href="memberCreate.html">신규등록</a></button>
+			</div>
+	    </div>
+	</article>
+	<article>
+	</article>
+	<form id="tmpFm">
+		<input type="hidden" name="action" value="R"> 
+		<input type="hidden" name="id" id="selectedMemId"> 
+	</form>
+</body>
+</html>

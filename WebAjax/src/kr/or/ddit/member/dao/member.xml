@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- namespace속성 : 아래에서 작성한 SQL을 호출할 때 같이 사용된다. -->			
+<sqlMap namespace="member">
+
+	<resultMap class="memVO" id="memberMap">   <!-- 멤버들이 컬럼명이랑 다를 때 컬럼명이랑 매핑시켜주는 것. -->
+		<result property="memId" column="mem_id" />
+		<result property="memPass" column="mem_pass" />
+		<result property="memName" column="mem_name" />
+		<result property="memBir" column="mem_bir" />
+		<result property="memHp" column="mem_hp" />
+		<result property="memRegno1" column="mem_regno1" />
+		<result property="memRegno2" column="mem_regno2" />
+		<result property="memAddr1" column="mem_add1" />
+		<result property="memAddr2" column="mem_add2" />
+		<result property="memMail" column="mem_mail" />
+		<result property="memZip" column="mem_zip" />
+	 </resultMap>
+	 
+	<resultMap class="TBmemVO" id="TBmemberMap">   <!-- 멤버들이 컬럼명이랑 다를 때 컬럼명이랑 매핑시켜주는 것. -->
+		<result property="memId" column="mem_id" />
+		<result property="memPass" column="mem_pass" />
+		<result property="memName" column="mem_name" />
+		<result property="memBir" column="mem_bir" />
+		<result property="memHp" column="mem_hp" />
+		<result property="memAddr1" column="mem_add1" />
+		<result property="memAddr2" column="mem_add2" />
+		<result property="memMail" column="mem_mail" />
+		<result property="memZip" column="mem_zip" />
+		<result property="memJob" column="mem_job" />
+	 </resultMap>
+	 
+	<delete id="deleteMember">
+		delete member
+		 where mem_id = #memId# 
+  		   and mem_pass = #memPass#
+	</delete>
+	<update id="updateMember">
+		update member
+   		set    mem_pass= #memPass#, mem_name=#memName#, mem_bir=#memBir#, mem_add2=#memAddr2#, mem_regno1=#memRegno1#, mem_regno2=#memRegno2# 
+ 		where  mem_id = #memId# 
+	</update>	 
+	<insert id="insertMember">
+		insert into tb_member(mem_id, mem_pass, mem_name, mem_bir, mem_add1, mem_add2, mem_hp, mem_mail, mem_zip, mem_job)
+		   values(#memId#, #memPass#, #memName#, #memBir#, #memAddr1#, #memAddr2#, #memHp#, #memMail#, #memZip#, #memJob#) 
+	</insert>
+	
+	<select id="retrieveMember" resultMap="TBmemberMap">
+		select * from tb_member where 1=1
+			<isNotEmpty property="memId">
+				and mem_id = #memId#
+			</isNotEmpty>
+	</select>
+	<select id="retrieveList" resultMap="memberMap"> 
+		select * from member where 1=1
+			<isNotEmpty property="memId">
+				and mem_id Like '%'||#memId#||'%'
+			</isNotEmpty>
+			<isNotEmpty property="memName">
+				and mem_name Like '%'||#memName#||'%'
+			</isNotEmpty>
+	</select>
+</sqlMap>			
+
+
+
+

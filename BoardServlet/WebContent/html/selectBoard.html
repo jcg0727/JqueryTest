@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script src="../../js/jquery-3.5.1.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$.ajax({
+		url : "../selectBoard"
+		,type : "post"
+		,dataType : "json"
+		,data : $("#mf").serialize()
+		,success : function(data){
+			console.log(data);
+			var table = makeTable(data);
+			$("#tb").append(table);
+		}
+		,error : function(xhr){
+			alert(xhr);
+		}
+	});
+});
+
+function makeTable(data){
+	$("#tb tr:nth-child(2)").remove();
+	var table = "";
+	
+	for(var i=0;i<data.length;i++){
+		var date = data[i].date.substr(0,10);
+		table += "<tr>"
+				+"<td>"+data[i].no+"</td>"
+				+"<td>"+data[i].title+"</td>"
+				+"<td>"+data[i].writer+"</td>"
+				+"<td>"+date+"</td>";
+				+"</tr>";
+	}
+	return table;
+}
+</script>
+</head>
+<body>
+	<h1>게시글</h1>
+	<form id="mf">
+		<table id="tb">
+			<tr>
+				<th>글번호</th>
+				<th>제목</th>
+				<th>작성자</th>
+				<th>날짜</th>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>
